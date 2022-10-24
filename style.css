@@ -4,6 +4,7 @@
     column-gap: 1px;
     grid-template-columns: repeat(10,50px);
     margin: auto;
+    margin-top: 5%;
     vertical-align: middle;
     border: 6px solid black;  
     background-color: black;
@@ -28,10 +29,29 @@
 
 }
 
+.body {
+    background-image: url("images/bombomb_background.png");
+    background-size: 300px;
+    background-position: center;
+    background-color: rgba(0, 0, 0, .15);
+}
+
+.banner {
+    text-align: center;
+    display: flex;
+    background-color: white;
+    box-shadow: 2px 2px 8px;
+    width: 105%;
+    height: 75px;
+    margin-bottom: 50px;
+    margin-top: -8px;
+    margin-left: -8px;
+}
+
 .text {
     font-size: 55px;
-    width: 95%;
     padding-top: 5px;
+    margin: auto;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     color: white;
     text-shadow:
@@ -41,20 +61,30 @@
         4px  4px 6px #000;
 }
 
-.body {
-    background-image: url("images/bombomb_background.png");
-    background-size: 300px;
-    background-position: center;
-    background-color: rgba(0, 0, 0, .15);
+.flag_counter {
+    display: flex;
+    font-size: 55px;
+    padding-top: 5px;
+    padding-right: 60px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: white;
+    text-shadow:
+        -4px -4px 6px #000,  
+        4px -4px 6px #000,
+        -4px  4px 6px #000,
+        4px  4px 6px #000;
 }
 
-.banner{
-    background-color: white;
-    box-shadow: 2px 2px 8px;
-    text-align: center;
-    width: 105%;
-    height: 75px;
-    margin-bottom: 50px;
-    margin-top: -8px;
-    margin-left: -8px;
+.timer_counter {
+    display: flex;
+    font-size: 55px;
+    padding-top: 5px;
+    padding-right: 80px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: white;
+    text-shadow:
+        -4px -4px 6px #000,  
+        4px -4px 6px #000,
+        -4px  4px 6px #000,
+        4px  4px 6px #000;
 }
