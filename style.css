@@ -7,10 +7,15 @@
     height: auto;
     width: 640px;
     border: 4px solid black;  
+    background-color: black;
 }            
 
 .tile {
-    background-color:darkgrey;
+    background-image: none;
+    background-size: 30px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: darkgray;
     height: 35px;                                         
     width: 35px;
 }
@@ -27,7 +32,20 @@
 .text {
     margin-bottom: 15px;
     margin-top: 20px;
-    font-size: 35px;
+    font-size: 40px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     text-align: center;
+    color: white;
+    text-shadow:
+        -4px -4px 6px #000,  
+        4px -4px 6px #000,
+        -4px  4px 6px #000,
+        4px  4px 6px #000;
+}
+
+.body {
+    background-image: url("images/bombomb_background.png");
+    background-size: 300px;
+    background-position: center;
+    background-color: rgba(0, 0, 0, .15);
 }
