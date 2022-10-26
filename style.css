@@ -37,7 +37,7 @@
 }
 
 .banner {
-    text-align: center;
+    justify-content: center;
     display: flex;
     background-color: white;
     box-shadow: 2px 2px 8px;
@@ -49,9 +49,9 @@
 }
 
 .text {
+    display: flex;
     font-size: 55px;
     padding-top: 5px;
-    margin: auto;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     color: white;
     text-shadow:
@@ -62,7 +62,9 @@
 }
 
 .flag_counter {
-    display: flex;
+    position: fixed;
+    top: 0;
+    right: 0;
     font-size: 55px;
     padding-top: 5px;
     padding-right: 60px;
@@ -76,10 +78,12 @@
 }
 
 .timer_counter {
-    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
     font-size: 55px;
     padding-top: 5px;
-    padding-right: 80px;
+    padding-left: 80px;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     color: white;
     text-shadow:
@@ -87,4 +91,34 @@
         4px -4px 6px #000,
         -4px  4px 6px #000,
         4px  4px 6px #000;
+}
+
+.timer_icon {
+    position: fixed;
+    top: 0;
+    left: 0;
+    font-size: 55px;
+    padding-top: 25px;
+    padding-left: 30px;
+    background-image: url("images/stopwatch_icon.png");
+    background-size: 40px;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 50px;
+    width: 60px;
+}
+
+.flag_icon {
+    position: fixed;
+    top: 0;
+    right: 0;
+    font-size: 55px;
+    padding-top: 20px;
+    padding-right: 340px;
+    background-image: url("images/flags_banner_icon.png");
+    background-size: 60px;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 50px;
+    width: 60px;
 }
