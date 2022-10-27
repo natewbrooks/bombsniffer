@@ -27,6 +27,7 @@ const BOMB_URL = "images/bombomb_background.png";
 var flagsUsed = 0;
 var totalChecks = 0;
 var stopwatch;
+var ingame = false;
 
 class Tile {
     constructor(x, y, mine=Boolean) {
@@ -42,50 +43,50 @@ class Tile {
 }
 
 class Stopwatch {
-    static timer = false;
-    static minutes = 0;
-    static seconds = 0;
-    static interval;
     static TIMER = document.querySelector(".timer_counter");
+    timer = false;
+    minutes = 0;
+    seconds = 0;
+    constructor() {
+        this.interval = setInterval(this.stopwatch.bind(this), 1000);
+    }
 
     stopwatch() {
-        if(Stopwatch.timer) {
-            Stopwatch.seconds++;
+        if(this.timer) {
+            this.seconds++;
 
-            if(Stopwatch.seconds == 60) {
-                Stopwatch.seconds = 0;
-                Stopwatch.minutes++;
+            if(this.seconds == 60) {
+                this.seconds = 0;
+                this.minutes++;
             }
 
-            if (Stopwatch.seconds < 10 && Stopwatch.minutes < 10) {
-                Stopwatch.TIMER.innerHTML = `0${Stopwatch.minutes} : 0${Stopwatch.seconds}`;
-            } else if (Stopwatch.minutes < 10) {
-                Stopwatch.TIMER.innerHTML = `0${Stopwatch.minutes} : ${Stopwatch.seconds}`;
-            } else if (Stopwatch.seconds < 10) {
-                Stopwatch.TIMER.innerHTML = `${Stopwatch.minutes} : 0${Stopwatch.seconds}`;
+            if (this.seconds < 10 && this.minutes < 10) {
+                Stopwatch.TIMER.innerHTML = `0${this.minutes} : 0${this.seconds}`;
+            } else if (this.minutes < 10) {
+                Stopwatch.TIMER.innerHTML = `0${this.minutes} : ${this.seconds}`;
+            } else if (this.seconds < 10) {
+                Stopwatch.TIMER.innerHTML = `${this.minutes} : 0${this.seconds}`;
             } else {
-                Stopwatch.TIMER.innerHTML = `${Stopwatch.minutes} : ${Stopwatch.seconds}`;
+                Stopwatch.TIMER.innerHTML = `${this.minutes} : ${this.seconds}`;
             }
         }
         
     }
 
     reset() {
-        Stopwatch.minutes = 0;
-        Stopwatch.seconds = 0;
+        this.minutes = 0;
+        this.seconds = 0;
         Stopwatch.TIMER.innerHTML = "00 : 00";
         return;
     }
 
     toggle(lever) {
         if(lever) {
-            Stopwatch.interval = setInterval(this.stopwatch, 1000);
-            Stopwatch.timer = true;
+            this.timer = true;
             return;
         }
 
-        Stopwatch.interval = null;
-        Stopwatch.timer = false;
+        this.timer = false;
         return;
     }
 }
@@ -101,23 +102,26 @@ window.onclick = e => {
             INPUT_ROWS.value = 10
             INPUT_BOMB.value = 10
             INPUT_COLUMNS.value = 10
+            generateBoard();
             return;
         case "medium_button":
             INPUT_ROWS.value = 16
             INPUT_BOMB.value = 40
-            INPUT_COLUMNS.value = 16            
+            INPUT_COLUMNS.value = 16
+            generateBoard();
             return;
         case "hard_button":
             INPUT_ROWS.value = 16
             INPUT_BOMB.value = 99
             INPUT_COLUMNS.value = 30
+            generateBoard();
             return;
         default:
             break;
     }
 
-    if(e.target.tile != null && !e.target.tile.flagged && !e.target.tile.clicked) {
-        if(totalChecks==0) {
+    if(e.target.tile != null && !e.target.tile.flagged && !e.target.tile.clicked && ingame) {
+        if(totalChecks==0 && (COLUMNS*ROWS) >= 16) {
             // no death on first click AND retry until there is an opening
             while (e.target.tile.number != 0 || e.target.tile.mine) {
                 setMines();
@@ -178,35 +182,15 @@ window.oncontextmenu = e => {
 }
 
 function main() {
-    GAMEBOARD.style.width = ((GAME_TILE_SIZE+GAME_TILE_PADDING) *COLUMNS)-1 + "px";
-    GAMEBOARD.style.setProperty('grid-template-columns', 'repeat(' + COLUMNS + ', ' + GAME_TILE_SIZE + "px");
+    // needs to be here 
     RESULTS_MENU.style.display = "none";
-    // GAMEBOARD.style.display = "none";
-    // FLAG_COUNTER.innerHTML = FLAGS - flagsUsed;
+
 
     if(stopwatch == null) {
         stopwatch = new Stopwatch();
     }
     
-    for (let i = 0; i < ROWS; i++) {
-        for (let j = 0; j < COLUMNS; j++) {
-            let tile = new Tile(i,j,false);
-            board.push(tile);
-            
-            let square = document.createElement("div");
-            square.classList.add("tile");
-            square.tile = tile;
-            tile.ui = square;
-
-            let number = document.createElement("div");
-            number.classList.add("number");
-            number.style.display = "none";
-            tile.uiNumber =  number;
-
-            square.appendChild(number);
-            GAMEBOARD.appendChild(square);
-        }
-    }
+    generateBoard();
     setMines();
 }
 
@@ -269,10 +253,11 @@ function numberAssignment() {
 
 function gameOver(winner) {
     stopwatch.toggle(false);
+    ingame = false;
 
     if(winner) {
-        RESULTS_MENU.innerHTML = "WINNER";
         RESULTS_MENU.style.display = "block";
+        RESULTS_MENU_TEXT.innerHTML = "WINNER";
         START_MENU.style.display = "block";
         BODY.style.backgroundImage = "url(images/smile_background.png)"
     } else {
@@ -348,7 +333,6 @@ function revealMines() {
 }
 
 function checkForError() {
-    console.log(INPUT_ROWS.value);
     if(INPUT_BOMB.value > (INPUT_ROWS.value * INPUT_COLUMNS.value)) {
         alert("You need to have less bombs than tiles.")
     } else {
@@ -357,16 +341,25 @@ function checkForError() {
 }
 
 function newGame() {
+    ingame = true;
+    totalChecks = 0;
+    FLAG_COUNTER.innerHTML = FLAGS;
+    BODY.style.backgroundImage = "url(images/bombomb_background.png)"
+    START_MENU.style.display = "none";
+    stopwatch.reset();
+    stopwatch.toggle(true);
+
+    main();
+}
+
+function generateBoard() {
     ROWS = INPUT_ROWS.value;
     MINES = INPUT_BOMB.value;
     COLUMNS = INPUT_COLUMNS.value;
-
-    BODY.style.backgroundImage = "url(images/bombomb_background.png)"
-    START_MENU.style.display = "none";
     FLAGS = MINES;
-    FLAG_COUNTER.innerHTML = MINES;
-    stopwatch.reset();
-    stopwatch.toggle(true);
+
+    GAMEBOARD.style.width = ((GAME_TILE_SIZE+GAME_TILE_PADDING) *COLUMNS)-1 + "px";
+    GAMEBOARD.style.setProperty('grid-template-columns', 'repeat(' + COLUMNS + ', ' + GAME_TILE_SIZE + "px");
 
     // delete visual tiles too
     board.forEach(tile => {
@@ -374,5 +367,23 @@ function newGame() {
     });
     board = [];
 
-    main();
+    for (let i = 0; i < ROWS; i++) {
+        for (let j = 0; j < COLUMNS; j++) {
+            let tile = new Tile(i,j,false);
+            board.push(tile);
+            
+            let square = document.createElement("div");
+            square.classList.add("tile");
+            square.tile = tile;
+            tile.ui = square;
+
+            let number = document.createElement("div");
+            number.classList.add("number");
+            number.style.display = "none";
+            tile.uiNumber =  number;
+
+            square.appendChild(number);
+            GAMEBOARD.appendChild(square);
+        }
+    }
 }
