@@ -1,5 +1,6 @@
 .board {
     display: grid;
+    transform: translate(0px, 90px);
     row-gap: 1px;
     column-gap: 1px;
     grid-template-columns: repeat(10,50px);
@@ -8,6 +9,7 @@
     vertical-align: middle;
     border: 6px solid black;  
     background-color: black;
+    border-radius: 10px;
 }            
 
 .tile {
@@ -34,14 +36,20 @@
     background-size: 300px;
     background-position: center;
     background-color: rgba(0, 0, 0, .15);
+    margin: auto;
+    width: 100%;
+    height: 100%;
 }
 
 .banner {
+    position: fixed;
+    top: 8px;
+    z-index: 99;
     justify-content: center;
     display: flex;
     background-color: white;
     box-shadow: 2px 2px 8px;
-    width: 105%;
+    width: 101.5%;
     height: 75px;
     margin-bottom: 50px;
     margin-top: -8px;
@@ -121,4 +129,190 @@
     background-repeat: no-repeat;
     height: 50px;
     width: 60px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    transform: translate(0,-300%);
+}
+
+.start_menu {
+    z-index: 90;
+    justify-content: center;
+    margin: auto;
+    width: 600px;
+    height: 450px;
+    position: fixed;
+    top: 25%;
+    left: 35%;
+}
+
+.start_menu .background {
+    display: block;
+    background-color: white;
+    height: 450px;
+    width: 600px;
+    border-radius: 15px;
+    box-shadow: 2px 2px 8px #000;
+    margin: 0px;
+}
+
+.start_menu .button {
+    display: inline-flex;
+    font-size: 25px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    background-color: #737170;
+    border: none;
+    padding: 10px 20px;
+    margin: 10px;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    box-shadow: 3px 4px 10px #000;
+
+}
+
+.start_menu .button:hover {
+    background-color: #4a4746;
+    color: #737170;
+}
+
+.start_menu .button:active {
+    box-shadow: 2px 2px 8px #000;
+    transform: translateY(4px);
+}
+
+
+.start_container {
+    display: flex;
+    justify-content: center;
+    transform: translate(0,-410%);
+}
+
+.start_button {
+    font-size: 25px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    background-color: #6da17d;
+    border: none;
+    padding: 20px 60px;
+    margin: 10px;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    box-shadow: 3px 4px 10px #000;
+}
+
+.start_button:hover {
+    background-color: #558062;
+    color: #afbab2;
+}
+
+.start_button:active {
+    background-color: #558062;
+    transform: translateY(4px);
+    box-shadow: 2px 2px 8px #000;
+  }
+
+.start_menu .input {
+    display: flex;
+    justify-content: center;
+    left: 50%;
+    transform: translate(0%,-425%);
+    height: 100px;
+}
+
+#rows_label {
+    font-size: 40px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    display: absolute;
+    transform: translate(5%,0%);
+}
+
+#columns_label {
+    font-size: 40px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    display: absolute;
+    transform: translate(-15%,0%);
+}
+
+.bombs_label {
+    transform: translate(20px, 12px);
+    background-image: url("images/bombomb_background.png");
+    background-size: 85px;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 85px;
+    width: 85px;
+}
+
+.bombs_input {
+    transform: translate(0px, -3px);
+    margin-right: 40px;
+    margin-left: 40px;
+}
+
+.start_menu .text_input {
+    text-align: center;
+    display: inline-flex;
+    margin: 10px;
+    font-size: 40px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    width: 90px;
+    box-shadow: 2px 2px 8px;
+    border: none;  
+}
+
+.start_menu .text_input::placeholder {
+    color: black;
+}
+
+.start_menu .text_input:hover {
+    color: #737170; 
+}
+
+.start_menu .text_input:focus {
+    color: #737170; 
+
+}
+
+.rows_input {
+    margin-right: 40px;
+    margin-left: 40px;
+}
+
+.columns_input {
+    margin-left: 40px;
+    margin-right: -10px;
+}
+
+.rows_input .input_label {
+    display: flex;
+    font-size: 40px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    display: absolute;
+    transform: translate(120%,-60%);
+}
+
+.columns_input .input_label {
+    display: flex;
+    font-size: 40px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    display: absolute;
+    transform: translate(120%,-60%);
+}
+
+.start_menu .start_menu_text {
+    position: absolute;
+    display: flex;
+    left: 50%;
+    transform: translate(-50%,-800%);
+    font-size: 40px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+#difficulty_select_text {
+    position: absolute;
+    display: flex;
+    transform: translate(-50%,-1040%);
 }

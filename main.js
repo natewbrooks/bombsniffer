@@ -1,15 +1,20 @@
 var board = [];
 var mines = [];
 
-const MINES = 102;
-const FLAGS = MINES;
-const ROWS = 16; //16
-const COLUMNS = 30; //30
+var ROWS = 20;
+var MINES = 60;
+var COLUMNS = 24;
+var FLAGS = MINES;
 
 const GAMEBOARD = document.querySelector(".board");
 const GAME_TILE_SIZE = 35;
 const GAME_TILE_PADDING = 1;
+
 const FLAG_COUNTER = document.querySelector(".flag_counter");
+const START_MENU = document.querySelector(".start_menu");
+const INPUT_ROWS = document.getElementById("inputX");
+const INPUT_BOMB = document.getElementById("inputBomb");
+const INPUT_COLUMNS = document.getElementById("inputY");
 
 const UNCHECKED_COLOR = "darkgray";
 const CHECKED_COLOR = "white";
@@ -82,6 +87,29 @@ class Stopwatch {
 window.onload = main();
 
 window.onclick = e => {
+    switch (e.target.id) {
+        case "start_button":
+            newGame();
+            return;
+        case "easy_button":
+            INPUT_ROWS.value = 10
+            INPUT_BOMB.value = 10
+            INPUT_COLUMNS.value = 10
+            return;
+        case "medium_button":
+            INPUT_ROWS.value = 16
+            INPUT_BOMB.value = 40
+            INPUT_COLUMNS.value = 16            
+            return;
+        case "hard_button":
+            INPUT_ROWS.value = 30
+            INPUT_BOMB.value = 99
+            INPUT_COLUMNS.value = 16
+            return;
+        default:
+            break;
+    }
+
     if(e.target.tile != null && !e.target.tile.flagged && !e.target.tile.clicked) {
         if(totalChecks==0) {
             // no death on first click AND retry until there is an opening
@@ -146,14 +174,13 @@ window.oncontextmenu = e => {
 function main() {
     GAMEBOARD.style.width = ((GAME_TILE_SIZE+GAME_TILE_PADDING) *COLUMNS)-1 + "px";
     GAMEBOARD.style.setProperty('grid-template-columns', 'repeat(' + COLUMNS + ', ' + GAME_TILE_SIZE + "px");
-    FLAG_COUNTER.innerHTML = FLAGS - flagsUsed;
+    // GAMEBOARD.style.display = "none";
+    // FLAG_COUNTER.innerHTML = FLAGS - flagsUsed;
 
     if(stopwatch == null) {
         stopwatch = new Stopwatch();
-        stopwatch.toggle(true);
     }
     
-
     for (let i = 0; i < ROWS; i++) {
         for (let j = 0; j < COLUMNS; j++) {
             let tile = new Tile(i,j,false);
@@ -304,4 +331,38 @@ function revealMines() {
     mines.forEach(mine => {
         revealTile(mine);
     });
+}
+
+function newGame() {
+    if(INPUT_ROWS.value == 0) {
+        ROWS = 20;
+    } else {
+        ROWS = INPUT_ROWS.value;
+    }
+
+    if(INPUT_BOMB.value == 0) {
+        MINES = 64;
+    } else {
+        MINES = INPUT_BOMB.value;
+    }
+
+    if(INPUT_COLUMNS.value == 0) {
+        COLUMNS = 24;
+    } else {
+        COLUMNS = INPUT_COLUMNS.value;
+    }
+
+
+    START_MENU.style.display = "none";
+    FLAGS = MINES;
+    FLAG_COUNTER.innerHTML = MINES;
+    stopwatch.toggle(true);
+
+    // delete visual tiles too
+    board.forEach(tile => {
+        tile.ui.remove();
+    });
+    board = [];
+
+    main();
 }
