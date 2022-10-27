@@ -22,6 +22,7 @@ const INPUT_COLUMNS = document.getElementById("inputY");
 const UNCHECKED_COLOR = "darkgray";
 const CHECKED_COLOR = "white";
 const FLAG_URL = "images/flags_banner_icon.png";
+const MISPLACED_FLAG_URL = "images/misplaced_flag.png";
 const BOMB_URL = "images/bombomb_background.png";
 
 var flagsUsed = 0;
@@ -129,7 +130,6 @@ window.onclick = e => {
             revealTile(e.target.tile);
             totalChecks++;
         } else if(e.target.tile.mine) {
-            revealMines();
             gameOver(false);
         } else {
             totalChecks++;
@@ -252,6 +252,7 @@ function numberAssignment() {
 }
 
 function gameOver(winner) {
+    revealMines();
     stopwatch.toggle(false);
     ingame = false;
 
@@ -261,6 +262,12 @@ function gameOver(winner) {
         START_MENU.style.display = "block";
         BODY.style.backgroundImage = "url(images/smile_background.png)"
     } else {
+        board.forEach(tile => {
+            if(tile.flagged && !tile.mine) {
+                tile.ui.style.backgroundImage = "url(" + MISPLACED_FLAG_URL + ")";
+            }
+        });
+
         RESULTS_MENU_TEXT.innerHTML = "LOSER";
         RESULTS_MENU.style.display = "block";
         START_MENU.style.display = "block";
