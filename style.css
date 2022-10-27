@@ -32,11 +32,11 @@
 }
 
 .body {
+    position: absolute;
     background-image: url("images/bombomb_background.png");
     background-size: 300px;
     background-position: center;
     background-color: rgba(0, 0, 0, .15);
-    margin: auto;
     width: 100%;
     height: 100%;
 }
@@ -139,17 +139,14 @@
 
 .start_menu {
     z-index: 90;
-    justify-content: center;
-    margin: auto;
+    margin: 0 auto;
     width: 600px;
     height: 450px;
-    position: fixed;
-    top: 25%;
-    left: 35%;
+    transform: translate(0px, -550px);
+    
 }
 
 .start_menu .background {
-    display: block;
     background-color: white;
     height: 450px;
     width: 600px;
@@ -315,4 +312,29 @@
     position: absolute;
     display: flex;
     transform: translate(-50%,-1040%);
+}
+
+.results_menu {
+    margin: 0 auto;
+    width: 800px;
+    height: 200px;
+    transform: translate(-10px, -1120px);
+}
+
+.results_menu .background {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin: 0 auto;
+    background: url("images/results_banner2.png") no-repeat;
+    background-size: 800px;
+    background-position: center;
+    width: 850px;
+    height: 200px;
+}
+
+.results_menu .text {
+    display: flex;
+    font-size: 75px;
+    transform: translate(0px, 20px);
 }

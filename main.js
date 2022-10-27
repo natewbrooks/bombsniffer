@@ -12,6 +12,9 @@ const GAME_TILE_PADDING = 1;
 
 const FLAG_COUNTER = document.querySelector(".flag_counter");
 const START_MENU = document.querySelector(".start_menu");
+const RESULTS_MENU = document.querySelector(".results_menu");
+const BODY = document.querySelector(".body");
+const RESULTS_MENU_TEXT = document.getElementById("results_menu_text");
 const INPUT_ROWS = document.getElementById("inputX");
 const INPUT_BOMB = document.getElementById("inputBomb");
 const INPUT_COLUMNS = document.getElementById("inputY");
@@ -42,6 +45,7 @@ class Stopwatch {
     static timer = false;
     static minutes = 0;
     static seconds = 0;
+    static interval;
     static TIMER = document.querySelector(".timer_counter");
 
     stopwatch() {
@@ -69,16 +73,18 @@ class Stopwatch {
     reset() {
         Stopwatch.minutes = 0;
         Stopwatch.seconds = 0;
+        Stopwatch.TIMER.innerHTML = "00 : 00";
         return;
     }
 
     toggle(lever) {
         if(lever) {
-            Stopwatch.timer = setInterval(this.stopwatch, 1000);
+            Stopwatch.interval = setInterval(this.stopwatch, 1000);
             Stopwatch.timer = true;
             return;
         }
 
+        Stopwatch.interval = null;
         Stopwatch.timer = false;
         return;
     }
@@ -89,7 +95,7 @@ window.onload = main();
 window.onclick = e => {
     switch (e.target.id) {
         case "start_button":
-            newGame();
+            checkForError();
             return;
         case "easy_button":
             INPUT_ROWS.value = 10
@@ -102,9 +108,9 @@ window.onclick = e => {
             INPUT_COLUMNS.value = 16            
             return;
         case "hard_button":
-            INPUT_ROWS.value = 30
+            INPUT_ROWS.value = 16
             INPUT_BOMB.value = 99
-            INPUT_COLUMNS.value = 16
+            INPUT_COLUMNS.value = 30
             return;
         default:
             break;
@@ -120,7 +126,7 @@ window.onclick = e => {
             totalChecks++;
         } else if(e.target.tile.mine) {
             revealMines();
-            gameOver();
+            gameOver(false);
         } else {
             totalChecks++;
             revealTile(e.target.tile);
@@ -133,7 +139,7 @@ window.onclick = e => {
                 return;
             }
         });
-        if (pass) winnerwinnerchickendinner();
+        if (pass) gameOver(true);
     }
 }
 
@@ -162,7 +168,7 @@ window.oncontextmenu = e => {
                 }
             });
     
-            if(pass) winnerwinnerchickendinner();
+            if(pass) gameOver(true);
         }
         
         console.log("You don't have any flags left!");
@@ -174,6 +180,7 @@ window.oncontextmenu = e => {
 function main() {
     GAMEBOARD.style.width = ((GAME_TILE_SIZE+GAME_TILE_PADDING) *COLUMNS)-1 + "px";
     GAMEBOARD.style.setProperty('grid-template-columns', 'repeat(' + COLUMNS + ', ' + GAME_TILE_SIZE + "px");
+    RESULTS_MENU.style.display = "none";
     // GAMEBOARD.style.display = "none";
     // FLAG_COUNTER.innerHTML = FLAGS - flagsUsed;
 
@@ -260,15 +267,22 @@ function numberAssignment() {
     });
 }
 
-function gameOver() {
+function gameOver(winner) {
     stopwatch.toggle(false);
-    console.log("You lost");
+
+    if(winner) {
+        RESULTS_MENU.innerHTML = "WINNER";
+        RESULTS_MENU.style.display = "block";
+        START_MENU.style.display = "block";
+        BODY.style.backgroundImage = "url(images/smile_background.png)"
+    } else {
+        RESULTS_MENU_TEXT.innerHTML = "LOSER";
+        RESULTS_MENU.style.display = "block";
+        START_MENU.style.display = "block";
+        BODY.style.backgroundImage = "url(images/explosion_background2.png)"
+    }
 }
 
-function winnerwinnerchickendinner() {
-    stopwatch.toggle(false);
-    console.log("You won!")
-}
 
 function sniff(tile) {
     let startingX = tile.x-1
@@ -333,29 +347,25 @@ function revealMines() {
     });
 }
 
+function checkForError() {
+    console.log(INPUT_ROWS.value);
+    if(INPUT_BOMB.value > (INPUT_ROWS.value * INPUT_COLUMNS.value)) {
+        alert("You need to have less bombs than tiles.")
+    } else {
+        newGame();
+    }
+}
+
 function newGame() {
-    if(INPUT_ROWS.value == 0) {
-        ROWS = 20;
-    } else {
-        ROWS = INPUT_ROWS.value;
-    }
+    ROWS = INPUT_ROWS.value;
+    MINES = INPUT_BOMB.value;
+    COLUMNS = INPUT_COLUMNS.value;
 
-    if(INPUT_BOMB.value == 0) {
-        MINES = 64;
-    } else {
-        MINES = INPUT_BOMB.value;
-    }
-
-    if(INPUT_COLUMNS.value == 0) {
-        COLUMNS = 24;
-    } else {
-        COLUMNS = INPUT_COLUMNS.value;
-    }
-
-
+    BODY.style.backgroundImage = "url(images/bombomb_background.png)"
     START_MENU.style.display = "none";
     FLAGS = MINES;
     FLAG_COUNTER.innerHTML = MINES;
+    stopwatch.reset();
     stopwatch.toggle(true);
 
     // delete visual tiles too
